@@ -2,51 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour, IAttackable
+public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
-    private float speed;
-    private Rigidbody rb;
 
     public float horizontalInput;
     public float verticalInput;
 
-    public int health = 100;
-
-    public void TakeDamage(int damage)
-    {
-        // Reducir la salud del jugador
-        health -= damage;
-
-        // Comprobar si la salud del jugador ha llegado a cero o menos
-        if (health <= 0)
-        {
-            Die();
-        }
-    }
-    
-
-    public void OnAttack(int damage)
-    {
-        // Implementa el manejo del ataque al jugador aquí
-        TakeDamage(damage);
-    }
-
-    //Muerte xd
-    public void Die()
-    {
-        Destroy(gameObject);
-    }
+    private CharacterController player;
+    public float movementSpeed = 5.0f;
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody>();
+        player = GetComponent<CharacterController>();
     }
 
     void Update()
     {
-        rb.velocity = new Vector3(
-            PlayerInput.Instance.DirectionalInput.x, rb.velocity.y,
-            PlayerInput.Instance.DirectionalInput.y) * speed;
+        float forwardMovement = Input.GetAxis("Vertical") * movementSpeed;
+        float strafeMovement = Input.GetAxis("Horizontal") * movementSpeed;
+
+        Vector3 speed = new Vector3(strafeMovement, 0, forwardMovement);
+        speed = transform.rotation * speed;
+        player.SimpleMove(speed);
     }
 }
