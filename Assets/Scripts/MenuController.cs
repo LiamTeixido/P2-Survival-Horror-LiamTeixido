@@ -27,7 +27,7 @@ public class MenuController : MonoBehaviour
 
     private void GetFirstTrophy()
     {
-        Trophies.TryUnlock(216144, (result) =>
+        Trophies.TryUnlock(216145, (result) =>
         {
             switch (result)
             {
